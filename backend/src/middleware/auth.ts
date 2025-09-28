@@ -17,21 +17,14 @@ declare global {
 
 // Middleware to verify JWT and attach user info to request
 export const verifyJWT = (req: Request, res: Response, next: NextFunction) => {
-    const authHeader = req.headers["authorization"];
-    if (!authHeader) {
-        res.status(401).json({ message: "No jwt token provided" });
-        return;
-    }
-
-    const token = authHeader.split(" ")[1]; // Bearer <token>
+    const token = req.cookies?.['jwtToken']; // read from cookie
     if (!token) {
-        res.status(401).json({ message: "Invalid token format, use 'Bearer <token>' format" });
+        res.status(401).json({ message: "No JWT token provided (cookie)" });
         return;
     }
 
     try {
-        const decoded = jwt.verify(token, JWT_SECRET) as JWTPayload;
-        req.jwtUser = { id: decoded.id, role: decoded.role };
+        req.jwtUser = jwt.verify(token, JWT_SECRET) as JWTPayload;
         next();
     } catch (err) {
         res.status(403).json({ message: "Invalid or expired jwt token" });
