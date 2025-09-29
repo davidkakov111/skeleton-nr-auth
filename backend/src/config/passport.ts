@@ -16,10 +16,10 @@ passport.use(
                 if (!user) return done(null, false, { message: "User not found" });
 
                 // If the user has no password (social login), reject login
-                if (!user.password) return done(null, false, { message: "Invalid user password" });
+                if (!user.password) return done(null, false, { message: "Missing user password" });
 
                 const isMatch = await bcrypt.compare(password, user.password);
-                if (!isMatch) return done(null, false, { message: "Invalid credentials" });
+                if (!isMatch) return done(null, false, { message: "Invalid password" });
 
                 return done(null, user);
             } catch (err) {

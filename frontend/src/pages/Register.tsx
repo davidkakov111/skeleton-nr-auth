@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { TextField, Button, Box, Typography, Alert } from "@mui/material";
-import type { ApiError } from "../../types/api";
-import { useAuth } from "../../context/useAuth";
+import type { ApiError } from "../types/api";
+import { useAuth } from "../context/useAuth";
 import { useNavigate } from "react-router-dom";
 
 // Registration component
@@ -32,7 +32,7 @@ export default function Register() {
     };
 
     return (
-        <Box sx={{ maxWidth: 400, mx: "auto", mt: 10 }}>
+        <Box sx={{ maxWidth: 400, mx: "auto", mt: 10, backgroundColor: 'background.paper', padding: 3, borderRadius: 3, boxShadow: 4 }}>
             <Typography variant="h5" mb={2}>Register</Typography>
             
             {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
