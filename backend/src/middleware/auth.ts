@@ -3,8 +3,7 @@
 import type { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import type { JWTPayload, UserRole } from "../types/auth.js";
-
-const JWT_SECRET = process.env['JWT_SECRET'] || "supersecret";
+import { JWT_SECRET } from "../utils/auth.js";
 
 // Extend Express Request type to include `jwtUser`
 declare global {
@@ -31,7 +30,7 @@ export const verifyJWT = (req: Request, res: Response, next: NextFunction) => {
     }
 };
 
-// Optional: role-based authorization middleware (provide multiple roles who can access)
+// User role-based authorization middleware (provide multiple roles who can access)
 export const authorizeRoles = (...roles: UserRole[]) => {
     return (req: Request, res: Response, next: NextFunction) => {
         if (!req.jwtUser || !roles.includes(req.jwtUser.role)) {

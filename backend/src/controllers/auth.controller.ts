@@ -2,37 +2,24 @@
 
 import type { Request, Response } from "express";
 import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
 import prisma from "../config/db.js";
 import type { User } from "../../generated/prisma/index.js";
-import type { NodeEnv } from "../types/env.js";
-
-const JWT_SECRET = process.env['JWT_SECRET'] || "supersecret";
-const NODE_ENV = process.env['NODE_ENV'] as NodeEnv || "development";
-
-// Create JWT token
-const createJWT = (id: number, email: string, role: string, createdAt: Date) => {
-    return jwt.sign(
-        { id, email, role, createdAt },
-        JWT_SECRET,
-        { expiresIn: "24h" }
-    );
-}
-
-// Helper to set JWT as HttpOnly cookie to response
-const setJWTCookie = (res: Response, token: string) => {
-    res.cookie("jwtToken", token, {
-        httpOnly: true,                    // JS cannot read it
-        secure: NODE_ENV === "production", // only over HTTPS
-        sameSite: "none",                  // allow cross-site
-        maxAge: 1000 * 60 * 60 * 24        // 24 hours in milliseconds
-    });
-}
+import { clearJWTCookie, createJWT, setJWTCookie, validateEmail, validatePassword } from "../utils/auth.js";
 
 // Regiester the user if not exists and return JWT cookie
 export const register = async (req: Request, res: Response): Promise<void>  => {
-    const { email, password } = req.body;
     try {
+        const { email, password } = req.body;
+
+        // Basic validation
+        if (!validateEmail(email)) {
+            res.status(400).json({ message: "Invalid email format" });
+            return;
+        } else if (!validatePassword(password)) {
+            res.status(400).json({ message: "Password must be at least 8 characters long and include uppercase, lowercase, digit, and special character." });
+            return;
+        }
+
         const existingUser = await prisma.user.findUnique({ where: { email } });
         if (existingUser) {
             res.status(400).json({ message: "User already exists" });
@@ -49,6 +36,7 @@ export const register = async (req: Request, res: Response): Promise<void>  => {
         setJWTCookie(res, token);
         res.status(201).json({ message: "User registered", user: { id: newUser.id, email: newUser.email, role: newUser.role, createdAt: newUser.createdAt } });
     } catch (err) {
+        console.error('Error in register controller: ', err);
         res.status(500).json({ message: "Server error" });
     }
 };
@@ -65,11 +53,7 @@ export const login = async (req: Request, res: Response) => {
 
 // Logout user by clearing the JWT cookie
 export const logout = (_req: Request, res: Response) => {
-    res.clearCookie("jwtToken", {
-        httpOnly: true,
-        secure: NODE_ENV === "production",
-        sameSite: "none",
-    });
+    clearJWTCookie(res);
     res.json({ message: "Logged out" });
 };
 

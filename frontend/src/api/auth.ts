@@ -1,24 +1,22 @@
-import axios, { type AxiosResponse } from "axios";
 import type { JWTPayload } from "../types/api";
+import { api } from "./axios";
 
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
-
-// Register user and return JWT
-export const register = (email: string, password: string): Promise<AxiosResponse<{ message: string, user: JWTPayload }>> => {
-  return axios.post(`${API_URL}/auth/register`, { email, password });
+// Register user
+export const register = (email: string, password: string) => {
+  return api.post<{ message: string, user: JWTPayload }>('/auth/register', { email, password });
 };
 
-// Login user and return JWT
-export const login = (email: string, password: string): Promise<AxiosResponse<{ message: string, user: JWTPayload }>> => {
-  return axios.post(`${API_URL}/auth/login`, { email, password });
+// Login user
+export const login = (email: string, password: string) => {
+  return api.post<{ message: string, user: JWTPayload }>('/auth/login', { email, password });
 };
 
-// Logout user server-side based on JWT in cookie
-export const logout = (): Promise<AxiosResponse<{ message: string }>> => {
-  return axios.post(`${API_URL}/auth/logout`, {}, { withCredentials: true });
+// Logout user
+export const logout = () => {
+  return api.post<{ message: string }>('/auth/logout');
 };
 
-// Get user status based on JWT in cookie
-export const status = (): Promise<AxiosResponse<{ user: JWTPayload }>> => {
-  return axios.get(`${API_URL}/auth/status`, { withCredentials: true });
+// Get user status
+export const status = () => {
+  return api.get<{ user: JWTPayload }>('/auth/status');
 };
