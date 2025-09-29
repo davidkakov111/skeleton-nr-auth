@@ -1,8 +1,11 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { TextField, Button, Box, Typography, Alert } from "@mui/material";
 import type { ApiError } from "../types/api";
 import { useAuth } from "../context/useAuth";
 import { useNavigate } from "react-router-dom";
+import { getPasswordErrors, validateEmail, validatePassword } from "../utils/auth";
+import { useDebounceEffect } from "../utils/debounce";
+import type { PasswordValidationResult } from "../types/auth";
 
 // Login component
 export default function Login() {
@@ -10,11 +13,46 @@ export default function Login() {
     const { login } = useAuth();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [error, setError] = useState("");
+    const [errors, setErrors] = useState<{
+        other: string; 
+        email: string;
+        password: PasswordValidationResult | null; 
+    }>({
+        other: "",
+        email: "",
+        password: null,
+    });
 
+    // Debounce validate email
+    const validateEmailDebounced = useCallback(() => {
+        const emailError = validateEmail(email);
+        setErrors(prev => ({ ...prev, email: emailError && email.length ? emailError : '' }));
+    }, [email]);
+    useDebounceEffect(email, validateEmailDebounced);
+
+    // Debounce validate password
+    const validatePasswordDebounced = useCallback(() => {
+        setErrors(prev => ({...prev, password: password.length ? validatePassword(password) : null}));
+    }, [password]);
+    useDebounceEffect(password, validatePasswordDebounced);
+
+    // Handle form submission
     const handleSubmit = async () => {
-        setError(""); // reset error
+        setErrors(prev => ({...prev, other: ''}));  // reset other error
 
+        // Validate email
+        const emailError = validateEmail(email);
+        if (emailError) {setErrors(prev => ({...prev, email: emailError})); return;}
+        
+        // Validate passwords
+        const passValidation = validatePassword(password);
+        if (!passValidation.digit
+            || !passValidation.lowercase
+            || !passValidation.minLength
+            || !passValidation.specialChar
+            || !passValidation.uppercase    
+        ) {setErrors(prev => ({...prev, password: passValidation})); return;};    
+        
         try {
             await login(email, password);
             // Redirect to homepage
@@ -22,7 +60,7 @@ export default function Login() {
         } catch (err) {
             console.error("Login error: ", err);
             const errorMsg = (err as ApiError).response?.data?.message || "Error";
-            setError(errorMsg);
+            setErrors(prev => ({...prev, other: errorMsg}));
         }
     };
 
@@ -30,10 +68,14 @@ export default function Login() {
         <Box sx={{ maxWidth: 400, mx: "auto", mt: 10, backgroundColor: 'background.paper', padding: 3, borderRadius: 3, boxShadow: 4 }}>
             <Typography variant="h5" mb={2}>Login</Typography>
 
-            {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
+            {errors.other && <Alert severity="error" sx={{ mb: 2 }}>{errors.other}</Alert>}
 
-            <TextField fullWidth label="Email" margin="normal" value={email} onChange={e => setEmail(e.target.value)} />
-            <TextField fullWidth label="Password" type="password" margin="normal" value={password} onChange={e => setPassword(e.target.value)} />
+            <TextField fullWidth label="Email" margin="normal" value={email} onChange={e => setEmail(e.target.value)}
+                error={!!errors.email} helperText={errors.email}/>
+            <TextField fullWidth label="Password" type="password" margin="normal" value={password} onChange={e => setPassword(e.target.value)}
+                error={!!errors.password} helperText={
+                    errors.password ? getPasswordErrors(errors.password).join(", ") : ""
+                }/>
             
             <Button variant="contained" fullWidth sx={{ mt: 2 }} onClick={handleSubmit}>Login</Button>
         </Box>

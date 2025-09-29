@@ -7,3 +7,11 @@ export interface AuthContextType {
     logout: () => Promise<void>;
     refreshStatus: () => Promise<void>;
 }
+
+export interface PasswordValidationResult {
+    minLength: boolean;
+    uppercase: boolean;
+    lowercase: boolean;
+    digit: boolean;
+    specialChar: boolean;
+}
