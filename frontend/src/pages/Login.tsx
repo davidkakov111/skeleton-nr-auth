@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { getPasswordErrors, validateEmail, validatePassword } from "../utils/auth";
 import { useDebounceEffect } from "../utils/debounce";
 import type { PasswordValidationResult } from "../types/auth";
+import PasswordField from "../components/form/PasswordField";
 
 // Login component
 export default function Login() {
@@ -72,10 +73,9 @@ export default function Login() {
 
             <TextField fullWidth label="Email" margin="normal" value={email} onChange={e => setEmail(e.target.value)}
                 error={!!errors.email} helperText={errors.email}/>
-            <TextField fullWidth label="Password" type="password" margin="normal" value={password} onChange={e => setPassword(e.target.value)}
-                error={!!errors.password} helperText={
-                    errors.password ? getPasswordErrors(errors.password).join(", ") : ""
-                }/>
+            <PasswordField value={password} onChange={e => setPassword(e.target.value)} error={!!errors.password} helperText={
+                errors.password ? getPasswordErrors(errors.password).join(", ") : ""
+            }/>
             
             <Button variant="contained" fullWidth sx={{ mt: 2 }} onClick={handleSubmit}>Login</Button>
         </Box>

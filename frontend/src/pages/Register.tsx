@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { getPasswordErrors, validateEmail, validatePassword } from "../utils/auth";
 import { useDebounceEffect } from "../utils/debounce";
 import type { PasswordValidationResult } from "../types/auth";
+import PasswordField from "../components/form/PasswordField";
 
 // Registration component
 export default function Register() {
@@ -74,13 +75,12 @@ export default function Register() {
 
             <TextField fullWidth label="Email" margin="normal" value={email} onChange={e => setEmail(e.target.value)} 
                 error={!!errors.email} helperText={errors.email}/>
-            <TextField fullWidth label="Password" type="password" margin="normal" value={password} onChange={e => setPassword(e.target.value)} 
-                error={!!errors.password} helperText={
-                    errors.password ? getPasswordErrors(errors.password).join(", ") : ""
-                }/>
-            <TextField fullWidth label="Password again" type="password" margin="normal" value={confPassword} onChange={e => setConfPassword(e.target.value)} 
+            <PasswordField value={password} onChange={e => setPassword(e.target.value)} error={!!errors.password} helperText={
+                errors.password ? getPasswordErrors(errors.password).join(", ") : ""
+            }/>
+            <PasswordField value={confPassword} onChange={e => setConfPassword(e.target.value)} 
                 error={confPassword !== password} helperText={confPassword === password ? "" : "Passwords do not match"}/>
-            
+
             <Button variant="contained" fullWidth sx={{ mt: 2 }} onClick={handleSubmit}>Register</Button>
         </Box>
     );
