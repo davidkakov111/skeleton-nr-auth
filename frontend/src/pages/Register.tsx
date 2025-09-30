@@ -68,7 +68,14 @@ export default function Register() {
     };
 
     return (
-        <Box sx={{ maxWidth: 400, mx: "auto", mt: 10, backgroundColor: 'background.paper', padding: 3, borderRadius: 3, boxShadow: 4 }}>
+        <Box
+            component="form"
+            onSubmit={(e) => {
+                e.preventDefault();
+                handleSubmit();
+            }}
+            sx={{ maxWidth: 400, mx: "auto", mt: 10, backgroundColor: 'background.paper', padding: 3, borderRadius: 3, boxShadow: 4 }}
+        >
             <Typography variant="h5" mb={2}>Register</Typography>
             
             {errors.other && <Alert severity="error" sx={{ mb: 2 }}>{errors.other}</Alert>}
@@ -81,7 +88,7 @@ export default function Register() {
             <PasswordField value={confPassword} onChange={e => setConfPassword(e.target.value)} 
                 error={confPassword !== password} helperText={confPassword === password ? "" : "Passwords do not match"}/>
 
-            <Button variant="contained" fullWidth sx={{ mt: 2 }} onClick={handleSubmit}>Register</Button>
+            <Button type="submit" variant="contained" fullWidth sx={{ mt: 2 }}>Register</Button>
         </Box>
     );
 }

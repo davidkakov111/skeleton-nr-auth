@@ -66,7 +66,14 @@ export default function Login() {
     };
 
     return (
-        <Box sx={{ maxWidth: 400, mx: "auto", mt: 10, backgroundColor: 'background.paper', padding: 3, borderRadius: 3, boxShadow: 4 }}>
+        <Box
+            component="form"
+            onSubmit={(e) => {
+                e.preventDefault();
+                handleSubmit();
+            }}
+            sx={{ maxWidth: 400, mx: "auto", mt: 10, backgroundColor: 'background.paper', padding: 3, borderRadius: 3, boxShadow: 4 }}
+        >
             <Typography variant="h5" mb={2}>Login</Typography>
 
             {errors.other && <Alert severity="error" sx={{ mb: 2 }}>{errors.other}</Alert>}
@@ -77,7 +84,7 @@ export default function Login() {
                 errors.password ? getPasswordErrors(errors.password).join(", ") : ""
             }/>
             
-            <Button variant="contained" fullWidth sx={{ mt: 2 }} onClick={handleSubmit}>Login</Button>
+            <Button type="submit" variant="contained" fullWidth sx={{ mt: 2 }}>Login</Button>
         </Box>
     );
 }
