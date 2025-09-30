@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import { login as apiLogin, logout as apiLogout, register as apiRegister, status } from "../api/auth";
-import type { ApiError, JWTPayload } from "../types/api";
+import { login as apiLogin, logout as apiLogout, register as apiRegister, status } from "../../api/auth";
+import type { ApiError, JWTPayload } from "../../types/api";
 import { AuthContext } from "./useAuth";
 
 // AuthProvider component to wrap around the app and provide auth state and functions

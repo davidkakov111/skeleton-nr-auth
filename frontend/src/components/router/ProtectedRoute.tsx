@@ -1,5 +1,5 @@
 import { Navigate } from "react-router-dom";
-import { useAuth } from "../context/useAuth";
+import { useAuth } from "../../context/auth/useAuth";
 
 // ProtectedRoute component to guard routes
 export default function ProtectedRoute({ children }: { children: React.JSX.Element }) {

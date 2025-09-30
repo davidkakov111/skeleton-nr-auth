@@ -1,7 +1,7 @@
 import { useCallback, useState } from "react";
 import { TextField, Button, Box, Typography, Alert } from "@mui/material";
 import type { ApiError } from "../types/api";
-import { useAuth } from "../context/useAuth";
+import { useAuth } from "../context/auth/useAuth";
 import { useNavigate } from "react-router-dom";
 import { getPasswordErrors, validateEmail, validatePassword } from "../utils/auth";
 import { useDebounceEffect } from "../utils/debounce";
