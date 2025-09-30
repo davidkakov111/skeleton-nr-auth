@@ -15,7 +15,7 @@ import { Avatar, Drawer, IconButton, List, ListItem, ListItemButton, ListItemTex
 import MenuIcon from "@mui/icons-material/Menu";
 
 const sections = [
-  { label: "Dashboard", to: "/dashboard", onlyUsers: true },
+  { label: "Dashboard", to: "/dashboard", onlyAuthenticated: true },
 ] as const;
 
 // Header component with navigation links
@@ -57,7 +57,7 @@ export default function Header() {
     };
 
     // Unprotected sections for this user
-    const displaySections = sections.filter(s => !s.onlyUsers || s.onlyUsers && !!user);
+    const displaySections = sections.filter(s => !s.onlyAuthenticated || s.onlyAuthenticated && !!user);
 
     return (
         <Slide in={visible} direction="down">

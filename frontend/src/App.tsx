@@ -3,7 +3,7 @@ import Register from "./pages/Register";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
 import Dashboard from "./pages/Dashboard";
-import ProtectedRoute from "./components/router/ProtectedRoute";
+import { ProtectedRouteIsAuth, ProtectedRouteIsNotAuth } from "./components/router/ProtectedRoute";
 import Header from "./components/layout/Header";
 import Footer from "./components/layout/Footer";
 import Container from "@mui/material/Container";
@@ -28,9 +28,9 @@ export default function App() {
         <Container maxWidth="xl" disableGutters sx={{ p: "5px" }}>
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+            <Route path="/register" element={<ProtectedRouteIsNotAuth><Register /></ProtectedRouteIsNotAuth>} />
+            <Route path="/login" element={<ProtectedRouteIsNotAuth><Login /></ProtectedRouteIsNotAuth>} />
+            <Route path="/dashboard" element={<ProtectedRouteIsAuth><Dashboard /></ProtectedRouteIsAuth>} />
             
             {/* Catch-all route for 404 */}
             <Route path="*" element={<NotFound />} />
