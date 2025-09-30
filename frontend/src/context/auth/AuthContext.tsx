@@ -6,9 +6,11 @@ import { AuthContext } from "./useAuth";
 // AuthProvider component to wrap around the app and provide auth state and functions
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [user, setUser] = useState<JWTPayload | null>(null);
+    const [loading, setLoading] = useState(true);
 
     // Function to refresh user authentication status
     const refreshStatus = async () => {
+        setLoading(true);
         try {
             const res = await status();
             setUser(res.data.user);
@@ -21,6 +23,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             } else if (status !== 401) {
                 console.error("An unexpected error occurred in status API call: ", err);
             }
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -57,7 +61,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }, []);
 
     return (
-        <AuthContext.Provider value={{ user, register, login, logout, refreshStatus }}>
+        <AuthContext.Provider value={{ user, register, login, logout, refreshStatus, loading }}>
             {children}
         </AuthContext.Provider>
     );

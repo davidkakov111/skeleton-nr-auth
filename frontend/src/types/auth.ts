@@ -6,6 +6,7 @@ export interface AuthContextType {
     login: (email: string, password: string) => Promise<void>;
     logout: () => Promise<void>;
     refreshStatus: () => Promise<void>;
+    loading: boolean;
 }
 
 export interface PasswordValidationResult {
