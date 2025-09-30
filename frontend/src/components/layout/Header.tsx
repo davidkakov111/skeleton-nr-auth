@@ -14,9 +14,10 @@ import { useEffect, useRef, useState } from "react";
 import { Avatar, Drawer, IconButton, List, ListItem, ListItemButton, ListItemText, Slide, useMediaQuery } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 
-const sections = [
+const sections: {label: string, to: string, onlyAuthenticated: boolean, roles?: string[]}[] = [
   { label: "Dashboard", to: "/dashboard", onlyAuthenticated: true },
-] as const;
+  { label: "Admin", to: "/admin", onlyAuthenticated: true, roles: ["admin"] },
+];
 
 // Header component with navigation links
 export default function Header() {
@@ -57,8 +58,22 @@ export default function Header() {
     };
 
     // Unprotected sections for this user
-    const displaySections = sections.filter(s => !s.onlyAuthenticated || s.onlyAuthenticated && !!user);
+    const displaySections = sections.filter(s => {
+        // if not authenticated-only, show
+        if (!s.onlyAuthenticated) return true;
 
+        // if user is logged in
+        if (s.onlyAuthenticated && user) {
+            // if no role restriction, show
+            if (!s?.roles) return true;
+
+            // check if user role is allowed
+            return s.roles.includes(user.role);
+        }
+
+        return false; // otherwise hide
+    });
+    
     return (
         <Slide in={visible} direction="down">
             <AppBar position="sticky" color="default" elevation={1}>

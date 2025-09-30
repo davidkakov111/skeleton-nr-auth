@@ -20,3 +20,8 @@ export const logout = () => {
 export const status = () => {
   return api.get<{ user: JWTPayload }>('/auth/status');
 };
+
+// Get admin-only info (example for admin role access route)
+export const adminOnlyInfo = () => {
+  return api.get<{ message: string }>('/auth/me/admin-info');
+};
