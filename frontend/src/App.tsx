@@ -9,6 +9,7 @@ import Footer from "./components/layout/Footer";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
 import NotFound from "./pages/NotFound";
+import ScrollToTop from "./components/router/scroller";
 
 // Main application component with routing and layout
 export default function App() {
@@ -21,6 +22,7 @@ export default function App() {
         bgcolor: 'background.default',
         color: 'text.primary',
       }}>
+        <ScrollToTop />
         <Header />
         
         <Container maxWidth="xl" disableGutters sx={{ p: "5px" }}>
