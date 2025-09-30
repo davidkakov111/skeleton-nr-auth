@@ -99,7 +99,7 @@ export default function Header() {
                                     color: "inherit",
                                 }}
                             >
-                                <Avatar src="/react.svg" alt="Logo" sx={{ width: 40, height: 40, mx: 1 }} />
+                                <Avatar src="/react.svg" alt="Logo" sx={{ width: 45, height: 40, mx: 1, borderRadius: 0 }} />
                                 {largeWidth && (
                                     <Typography variant="h6" sx={{ fontWeight: "bold" }}>
                                         SkeletonApp
