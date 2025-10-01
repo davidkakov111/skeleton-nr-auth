@@ -112,26 +112,28 @@ export default function Admin() {
             <Typography variant="h4" my={3}>User Role Management</Typography>
   
             {/* Users displayed in a modern, feature-rich table for easy role updates and user search */}
-            <DataGrid
-                rows={users}
-                columns={columns}
-                loading={loading}
-                pageSizeOptions={[10, 20, 50, 100]}
-                initialState={{
-                    pagination: { 
-                        paginationModel: { page: 0, pageSize: 50 } 
-                    },
-                    columns: {
-                        columnVisibilityModel: {
-                            id: false,
+            <Box sx={{ width: '100%', overflowX: 'auto' }}>
+                <DataGrid
+                    rows={users}
+                    columns={columns}
+                    loading={loading}
+                    pageSizeOptions={[10, 20, 50, 100]}
+                    initialState={{
+                        pagination: { 
+                            paginationModel: { page: 0, pageSize: 50 } 
                         },
-                    },
-                }}
-                disableRowSelectionOnClick
-                sx={{ border: 0 }}
-                showToolbar={true}
-                slots={{ toolbar: CustomToolbar }}
-            />
+                        columns: {
+                            columnVisibilityModel: {
+                                id: false,
+                            },
+                        },
+                    }}
+                    disableRowSelectionOnClick
+                    sx={{ border: 0, minWidth: 400 }}
+                    showToolbar={true}
+                    slots={{ toolbar: CustomToolbar }}
+                />
+            </Box>
         </Box>
     );
 }
