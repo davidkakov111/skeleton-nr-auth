@@ -21,6 +21,7 @@ export default function PasswordField({ value, onChange, error, helperText }: {
             onChange={onChange}
             error={error}
             helperText={helperText}
+            autoComplete="current-password"
             slotProps={{
                 input: {
                     endAdornment: (

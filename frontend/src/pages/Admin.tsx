@@ -89,6 +89,8 @@ export default function Admin() {
             filterOperators: getGridSingleSelectOperators(), 
             renderCell: (params) => (
                 <Select
+                    id={`role-select-${params.row.id}`}
+                    name="role"
                     value={params.value}
                     size="small"
                     onChange={(e) => handleRoleChange(params.row.id, e.target.value as UserRole)}

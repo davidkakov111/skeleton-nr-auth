@@ -83,7 +83,7 @@ export default function Register() {
             {errors.other && <Alert severity="error" sx={{ mb: 2 }}>{errors.other}</Alert>}
 
             <TextField fullWidth label="Email" margin="normal" value={email} onChange={e => setEmail(e.target.value)} 
-                error={!!errors.email} helperText={errors.email}/>
+                error={!!errors.email} helperText={errors.email} autoComplete="email"/>
             <PasswordField value={password} onChange={e => setPassword(e.target.value)} error={!!errors.password} helperText={
                 errors.password ? getPasswordErrors(errors.password).join(", ") : ""
             }/>
