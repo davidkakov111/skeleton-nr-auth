@@ -1,6 +1,9 @@
 import { Router } from "express";
 import { authorizeRoles, verifyJWT } from "../middleware/auth.js";
-import { getAllUsers, updateUserRole } from "../controllers/admin.controller.js";
+import {
+  getAllUsers,
+  updateUserRole,
+} from "../controllers/admin.controller.js";
 
 const router = Router();
 

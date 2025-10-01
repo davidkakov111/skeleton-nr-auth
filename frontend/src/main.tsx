@@ -1,10 +1,10 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import './index.css'
-import App from './App.tsx'
-import { AuthProvider } from './context/auth/AuthContext.tsx'
-import { SnackbarProvider } from 'notistack';
-import { ThemeProvider, createTheme } from '@mui/material';
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import "./index.css";
+import App from "./App.tsx";
+import { AuthProvider } from "./context/auth/AuthContext.tsx";
+import { SnackbarProvider } from "notistack";
+import { ThemeProvider, createTheme } from "@mui/material";
 
 const theme = createTheme({
   colorSchemes: {
@@ -12,14 +12,14 @@ const theme = createTheme({
   },
 });
 
-createRoot(document.getElementById('root')!).render(
+createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <ThemeProvider theme={theme}>
       <SnackbarProvider maxSnack={3}>
         <AuthProvider>
           <App />
-        </ AuthProvider>
+        </AuthProvider>
       </SnackbarProvider>
-    </ ThemeProvider>
+    </ThemeProvider>
   </StrictMode>,
-)
+);

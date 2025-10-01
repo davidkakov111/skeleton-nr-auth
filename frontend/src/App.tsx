@@ -3,7 +3,11 @@ import Register from "./pages/Register";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
 import Dashboard from "./pages/Dashboard";
-import { ProtectedRouteByRoles, ProtectedRouteIsAuth, ProtectedRouteIsNotAuth } from "./components/router/ProtectedRoute";
+import {
+  ProtectedRouteByRoles,
+  ProtectedRouteIsAuth,
+  ProtectedRouteIsNotAuth,
+} from "./components/router/ProtectedRoute";
 import Header from "./components/layout/Header";
 import Footer from "./components/layout/Footer";
 import Container from "@mui/material/Container";
@@ -16,29 +20,59 @@ import Admin from "./pages/Admin";
 export default function App() {
   return (
     <BrowserRouter>
-      <Box sx={{
-        display: "flex",
-        flexDirection: "column",
-        minHeight: "100vh",
-        bgcolor: 'background.default',
-        color: 'text.primary',
-      }}>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          minHeight: "100vh",
+          bgcolor: "background.default",
+          color: "text.primary",
+        }}
+      >
         <ScrollToTop />
         <Header />
-        
+
         <Container maxWidth="xl" disableGutters sx={{ p: "5px" }}>
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/register" element={<ProtectedRouteIsNotAuth><Register /></ProtectedRouteIsNotAuth>} />
-            <Route path="/login" element={<ProtectedRouteIsNotAuth><Login /></ProtectedRouteIsNotAuth>} />
-            <Route path="/dashboard" element={<ProtectedRouteIsAuth><Dashboard /></ProtectedRouteIsAuth>} />
-            <Route path="/admin" element={<ProtectedRouteByRoles roles={["admin"]}><Admin /></ProtectedRouteByRoles>} />
-            
+            <Route
+              path="/register"
+              element={
+                <ProtectedRouteIsNotAuth>
+                  <Register />
+                </ProtectedRouteIsNotAuth>
+              }
+            />
+            <Route
+              path="/login"
+              element={
+                <ProtectedRouteIsNotAuth>
+                  <Login />
+                </ProtectedRouteIsNotAuth>
+              }
+            />
+            <Route
+              path="/dashboard"
+              element={
+                <ProtectedRouteIsAuth>
+                  <Dashboard />
+                </ProtectedRouteIsAuth>
+              }
+            />
+            <Route
+              path="/admin"
+              element={
+                <ProtectedRouteByRoles roles={["admin"]}>
+                  <Admin />
+                </ProtectedRouteByRoles>
+              }
+            />
+
             {/* Catch-all route for 404 */}
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Container>
-        
+
         <Footer />
       </Box>
     </BrowserRouter>
