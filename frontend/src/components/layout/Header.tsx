@@ -10,9 +10,12 @@ import CloseIcon from "@mui/icons-material/Close";
 import LoginIcon from "@mui/icons-material/Login";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import LogoutIcon from "@mui/icons-material/Logout";
+import LightModeIcon from '@mui/icons-material/LightMode';
+import DarkModeIcon from '@mui/icons-material/DarkMode';
 import { useEffect, useRef, useState } from "react";
 import { Avatar, Drawer, IconButton, List, ListItem, ListItemButton, ListItemText, Slide, useMediaQuery } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
+import { useColorScheme } from "@mui/material/styles";
 
 const sections: {label: string, to: string, onlyAuthenticated: boolean, roles?: string[]}[] = [
   { label: "Dashboard", to: "/dashboard", onlyAuthenticated: true },
@@ -73,6 +76,10 @@ export default function Header() {
 
         return false; // otherwise hide
     });
+
+    // Color scheme for theme toggle
+    const { mode, setMode } = useColorScheme();
+    if (!mode) return null;
     
     return (
         <Slide in={visible} direction="down">
@@ -130,7 +137,7 @@ export default function Header() {
                                 <Button
                                     onClick={handleLogout}
                                     color="inherit"
-                                    startIcon={<LogoutIcon />}
+                                    startIcon={largeWidth ? <LogoutIcon /> : <></>}
                                 >
                                     Logout
                                 </Button>
@@ -141,7 +148,7 @@ export default function Header() {
                                         component={RouterLink}
                                         to="/login"
                                         color="inherit"
-                                        startIcon={<LoginIcon />}
+                                        startIcon={largeWidth ? <LoginIcon /> : <></>}
                                         sx={{ mr: 2 }}
                                     >
                                         Login
@@ -150,12 +157,17 @@ export default function Header() {
                                         component={RouterLink}
                                         to="/register"
                                         color="inherit"
-                                        startIcon={<PersonAddIcon />}
+                                        startIcon={largeWidth ? <PersonAddIcon /> : <></>}
                                     >
                                         Register
                                     </Button>
                                 </>
                             )}
+
+                            {/* Theme toggle */}
+                            <IconButton onClick={() => setMode(mode === "light" ? "dark" : "light")}>
+                                {mode === "light" ? <LightModeIcon /> : <DarkModeIcon />}
+                            </IconButton>
                         </Box>
                     </Toolbar>
                 </ Container>
