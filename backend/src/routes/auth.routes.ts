@@ -1,7 +1,7 @@
 import { Router, type Request, type Response, type NextFunction } from "express";
 import passport from "passport";
 import { register, login, logout, status } from "../controllers/auth.controller.js";
-import { authorizeRoles, verifyJWT } from "../middleware/auth.js";
+import { verifyJWT } from "../middleware/auth.js";
 import type { IVerifyOptions } from "passport-local";
 import type { User } from "../../generated/prisma/index.js";
 
@@ -26,10 +26,5 @@ router.post("/login", (req: Request, res: Response, next: NextFunction) => {
 router.post("/logout", logout);
 
 router.get("/status", verifyJWT, status);
-
-// Example route with authorizeRoles middleware:
-router.get("/me/admin-info", verifyJWT, authorizeRoles("admin"), (_req: Request, res: Response) => {
-  res.json({ message: "Extra admin-only info for your profile" });
-});
 
 export default router;

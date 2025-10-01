@@ -18,9 +18,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             setUser(null);
 
             const status = (err as ApiError).response?.status;
-            if (status == 403) {
-                console.warn("Your session has expired or is invalid, please log in again.");
-            } else if (status !== 401) {
+            if (status !== 401) {
                 console.error("An unexpected error occurred in status API call: ", err);
             }
         } finally {

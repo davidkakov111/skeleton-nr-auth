@@ -3,7 +3,7 @@
 import type { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import type { JWTPayload, UserRole } from "../types/auth.js";
-import { JWT_SECRET } from "../utils/auth.js";
+import { clearJWTCookie, JWT_SECRET } from "../utils/auth.js";
 
 // Extend Express Request type to include `jwtUser`
 declare global {
@@ -26,7 +26,8 @@ export const verifyJWT = (req: Request, res: Response, next: NextFunction) => {
         req.jwtUser = jwt.verify(token, JWT_SECRET) as JWTPayload;
         next();
     } catch (err) {
-        res.status(403).json({ message: "Invalid or expired jwt token" });
+        clearJWTCookie(res); // Auto logout
+        res.status(401).json({ message: "Invalid or expired jwt token" });
     }
 };
 

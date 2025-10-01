@@ -51,7 +51,7 @@ export default function Header() {
     const handleLogout = async () => {
         try {
             await logout();
-            navigate("/login");
+            navigate("/login", { replace: true });
         } catch (error) {
             console.error("Unexpected error occurred during logout: ", error);
         }
