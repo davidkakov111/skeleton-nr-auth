@@ -7,6 +7,7 @@ import { getPasswordErrors, validateEmail, validatePassword } from "../utils/aut
 import { useDebounceEffect } from "../utils/debounce";
 import type { PasswordValidationResult } from "../types/auth";
 import PasswordField from "../components/form/PasswordField";
+import SocaialAuthButtons from "../components/form/SocialAuthButtons";
 
 // Registration component
 export default function Register() {
@@ -78,6 +79,7 @@ export default function Register() {
         >
             <Typography variant="h5" mb={2}>Register</Typography>
             
+            {/* Email & password register */}
             {errors.other && <Alert severity="error" sx={{ mb: 2 }}>{errors.other}</Alert>}
 
             <TextField fullWidth label="Email" margin="normal" value={email} onChange={e => setEmail(e.target.value)} 
@@ -88,7 +90,10 @@ export default function Register() {
             <PasswordField value={confPassword} onChange={e => setConfPassword(e.target.value)} 
                 error={confPassword !== password} helperText={confPassword === password ? "" : "Passwords do not match"}/>
 
-            <Button type="submit" variant="contained" fullWidth sx={{ mt: 2 }}>Register</Button>
+            <Button type="submit" variant="contained" fullWidth sx={{ my: 2 }}>Register</Button>
+
+            {/* Social auth register */}
+            <SocaialAuthButtons isLogin={false} />
         </Box>
     );
 }

@@ -1,7 +1,7 @@
 import { Box, CircularProgress } from "@mui/material";
 
 // Full-page loading spinner
-export function FullPageSpinner({ size = 60, vhHeight = 100 }: { size?: number, vhHeight: number }) {
+export function FullPageSpinner({ size = 60, vhHeight = 100 }: { size?: number, vhHeight?: number }) {
     return (
         <Box
             sx={{

@@ -3,7 +3,6 @@
 import type { Request, Response } from "express";
 import bcrypt from "bcryptjs";
 import prisma from "../config/db.js";
-import type { User } from "../../generated/prisma/index.js";
 import { clearJWTCookie, createJWT, setJWTCookie, validateEmail, validatePassword } from "../utils/auth.js";
 
 // Regiester the user if not exists and return JWT cookie
@@ -39,16 +38,6 @@ export const register = async (req: Request, res: Response): Promise<void>  => {
         console.error('Error in register controller: ', err);
         res.status(500).json({ message: "Server error" });
     }
-};
-
-// Login user and return JWT cookie
-export const login = async (req: Request, res: Response) => {
-    // Passport populates req.user after local strategy succeeds
-    const user = req.user as User;
-    const token = createJWT(user.id, user.email, user.role, user.createdAt);
-   
-    setJWTCookie(res, token);
-    res.json({ message: "Logged in", user: { id: user.id, email: user.email, role: user.role, createdAt: user.createdAt } });
 };
 
 // Logout user by clearing the JWT cookie

@@ -7,6 +7,7 @@ import { getPasswordErrors, validateEmail, validatePassword } from "../utils/aut
 import { useDebounceEffect } from "../utils/debounce";
 import type { PasswordValidationResult } from "../types/auth";
 import PasswordField from "../components/form/PasswordField";
+import SocaialAuthButtons from "../components/form/SocialAuthButtons";
 
 // Login component
 export default function Login() {
@@ -76,6 +77,7 @@ export default function Login() {
         >
             <Typography variant="h5" mb={2}>Login</Typography>
 
+            {/* Email & password login */}
             {errors.other && <Alert severity="error" sx={{ mb: 2 }}>{errors.other}</Alert>}
 
             <TextField fullWidth label="Email" margin="normal" value={email} onChange={e => setEmail(e.target.value)}
@@ -84,7 +86,10 @@ export default function Login() {
                 errors.password ? getPasswordErrors(errors.password).join(", ") : ""
             }/>
             
-            <Button type="submit" variant="contained" fullWidth sx={{ mt: 2 }}>Login</Button>
+            <Button type="submit" variant="contained" fullWidth sx={{ my: 2 }}>Login</Button>
+
+            {/* Social auth login */}
+            <SocaialAuthButtons isLogin={true} />
         </Box>
     );
 }
