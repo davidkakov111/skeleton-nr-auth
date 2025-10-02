@@ -8,18 +8,20 @@ export default function PasswordField({
   onChange,
   error,
   helperText,
+  label = "Password",
 }: {
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   error?: boolean;
   helperText?: string;
+  label?: string;
 }) {
   const [showPassword, setShowPassword] = useState(false);
 
   return (
     <TextField
       fullWidth
-      label="Password"
+      label={label}
       type={showPassword ? "text" : "password"}
       margin="normal"
       value={value}

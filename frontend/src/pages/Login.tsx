@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { TextField, Button, Box, Typography, Alert } from "@mui/material";
 import type { ApiError } from "../types/api";
 import { useAuth } from "../context/auth/useAuth";
@@ -12,9 +12,11 @@ import { useDebounceEffect } from "../utils/debounce";
 import type { PasswordValidationResult } from "../types/auth";
 import PasswordField from "../components/form/PasswordField";
 import SocaialAuthButtons from "../components/form/SocialAuthButtons";
+import { useSnackbar } from "notistack";
 
 // Login component
 export default function Login() {
+  const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
   const { login } = useAuth();
   const [email, setEmail] = useState("");
@@ -83,6 +85,16 @@ export default function Login() {
     }
   };
 
+  // Capture social auth error from URL query
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const error = params.get("error");
+    if (error) {
+      console.error("Error in social auth: " + error);
+      enqueueSnackbar(error, { variant: "error", autoHideDuration: 15000 });
+    }
+  }, [enqueueSnackbar]);
+
   return (
     <Box
       component="form"
@@ -124,7 +136,7 @@ export default function Login() {
       <PasswordField
         value={password}
         onChange={(e) => setPassword(e.target.value)}
-        error={!!errors.password}
+        error={errors.password ? getPasswordErrors(errors.password).length > 0 : false}
         helperText={
           errors.password ? getPasswordErrors(errors.password).join(", ") : ""
         }

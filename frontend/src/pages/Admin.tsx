@@ -19,7 +19,7 @@ import { useAuth } from "../context/auth/useAuth";
 export default function Admin() {
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
-  const { logout, refreshStatus } = useAuth();
+  const { user, logout, refreshStatus } = useAuth();
   const [users, setUsers] = useState<JWTPayload[]>([]);
   const [loading, setLoading] = useState(false);
   const [updatingUserId, setUpdatingUserId] = useState<number | null>(null);
@@ -32,6 +32,7 @@ export default function Admin() {
       setUsers((prev) =>
         prev.map((u) => (u.id === userId ? { ...u, role } : u)),
       );
+      if (userId === user?.id) await refreshStatus(); // If we updated our role, then refresh status
       enqueueSnackbar("User role successfully updated", { variant: "success" });
     } catch (err) {
       const status = (err as ApiError).response?.status;

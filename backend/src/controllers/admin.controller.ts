@@ -1,5 +1,6 @@
 import prisma, { USER_ROLES } from "../config/db.js";
 import type { Request, Response } from "express";
+import { createJWT, setJWTCookie } from "../utils/auth.js";
 
 // Return all users
 export const getAllUsers = async (
@@ -31,6 +32,13 @@ export const updateUserRole = async (
   res: Response,
 ): Promise<void> => {
   try {
+    // Get admin user by jwt
+    const jwtUser = req.jwtUser;
+    if (!jwtUser) {
+      res.status(401).json({ message: "Not authenticated" });
+      return;
+    }
+
     // Validate input
     const { userId, role } = req.body;
     if (!userId || !role) {
@@ -52,6 +60,12 @@ export const updateUserRole = async (
     if (result.count === 0) {
       res.status(404).json({ message: "User not found" });
       return;
+    }
+
+    // If we updated our role, then update our jwt cookie accordingly
+    if (Number(userId) === jwtUser.id) {
+      const token = createJWT(jwtUser.id, jwtUser.email, role, jwtUser.createdAt);
+      setJWTCookie(res, token);
     }
 
     res.json({ message: "Success" });

@@ -126,7 +126,7 @@ export default function Register() {
       <PasswordField
         value={password}
         onChange={(e) => setPassword(e.target.value)}
-        error={!!errors.password}
+        error={errors.password ? getPasswordErrors(errors.password).length > 0 : false}
         helperText={
           errors.password ? getPasswordErrors(errors.password).join(", ") : ""
         }
@@ -136,6 +136,7 @@ export default function Register() {
         onChange={(e) => setConfPassword(e.target.value)}
         error={confPassword !== password}
         helperText={confPassword === password ? "" : "Passwords do not match"}
+        label="Confirm password"
       />
 
       <Button type="submit" variant="contained" fullWidth sx={{ my: 2 }}>

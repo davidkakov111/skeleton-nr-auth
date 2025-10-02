@@ -7,6 +7,7 @@ import prisma from "./db.js";
 import { validateEmail, validatePassword } from "../utils/auth.js";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import { randomUUID } from "crypto";
+import type { User } from "../../generated/prisma/index.js";
 
 // Configure Passport to use the "local" strategy for email/password login
 // It looks up the user by email, checks the password, and passes the user object if valid
@@ -55,29 +56,44 @@ passport.use(
     },
     async (_accessToken, _refreshToken, profile, done) => {
       try {
-        const email =
+        // Get relevant google account details
+        const googleEmail =
           profile.emails?.[0]?.value ||
           `google_${Date.now()}_${randomUUID()}@placeholder.local`;
+        const googleEmailVerified = profile._json?.email_verified ?? false;
+        const googleId = profile.id;
 
-        // Check for already existing user
-        let user = await prisma.user.findFirst({
+        // Check for already existing user (max 2 record, since both googleId and email are unique fields)
+        let users = await prisma.user.findMany({
           where: {
-            OR: [{ googleId: profile.id }, { email }],
+            OR: [{ googleId }, { email: googleEmail }],
           },
         });
+        let user: User | undefined;
 
-        if (user) {
-          // If user has no googleId yet, link it
-          if (!user.googleId) {
-            user = await prisma.user.update({
-              where: { id: user.id },
-              data: { googleId: profile.id },
-            });
+        if (users.length > 0) {// If there are posible users matches in db
+          user = users.find(u => u.googleId === googleId); // Find already existing user with this google id
+              
+          if (!user) { 
+            // There is a single user match by email
+            const dbUserByEmail = users[0]!;
+
+            if (!dbUserByEmail.googleId) {// If the existing account with this email does not have a googleId
+              if (!googleEmailVerified) {
+                return done(new Error("This Google email is already associated with a non-Google account in our system. However, because your Google email is not verified, we cannot link it to your existing account. Please verify your Google email with Google, or log in using your original credentials."), undefined);
+              }
+              user = await prisma.user.update({
+                where: { id: dbUserByEmail.id },
+                data: { googleId },
+              });
+            } else {
+              return done(new Error("This Google account's email is already linked to another Google account in our system."), undefined);
+            }
           }
         } else {
           // Create new user
           user = await prisma.user.create({
-            data: { googleId: profile.id, email },
+            data: { googleId, email: googleEmail },
           });
         }
 

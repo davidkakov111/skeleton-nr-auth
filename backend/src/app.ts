@@ -6,6 +6,7 @@ import passport from "passport";
 import "./config/passport.js"; // load strategies
 import authRoutes from "./routes/auth.routes.js";
 import adminRoutes from "./routes/admin.routes.js";
+import userRoutes from "./routes/user.routes.js";
 import cookieParser from "cookie-parser";
 
 // express-rate-limit is still CommonJS...
@@ -37,5 +38,6 @@ app.use(passport.initialize());
 // Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/admin", adminRoutes);
+app.use("/api/user", userRoutes);
 
 export default app;

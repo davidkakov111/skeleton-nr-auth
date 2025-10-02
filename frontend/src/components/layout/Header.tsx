@@ -33,7 +33,7 @@ const sections: {
   onlyAuthenticated: boolean;
   roles?: string[];
 }[] = [
-  { label: "Dashboard", to: "/dashboard", onlyAuthenticated: true },
+  { label: "Profile", to: "/profile", onlyAuthenticated: true },
   { label: "Admin", to: "/admin", onlyAuthenticated: true, roles: ["admin"] },
 ];
 
