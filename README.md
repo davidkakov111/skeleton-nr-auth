@@ -41,10 +41,4 @@ cd skeleton-nr-auth
 
 2. Setup backend and frontend separately (see /backend/README.md and /frontend/README.md)
 
-## Recommended Workflow
-
-- Backend API development in /backend
-- Frontend UI development in /frontend
-- Use .env files for secrets and database configuration
-
 ---
