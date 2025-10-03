@@ -129,25 +129,27 @@ export default function Profile() {
         <Typography variant="h6" gutterBottom>
           Update Email
         </Typography>
-        <TextField
-          fullWidth
-          label="Email"
-          type="email"
-          margin="normal"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          error={!!errors.email}
-          helperText={errors.email}
-          autoComplete="email"
-        />
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => updateEmail(email)}
-          sx={{ mt: 1 }}
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            updateEmail(email);
+          }}
         >
-          Update Email
-        </Button>
+          <TextField
+            fullWidth
+            label="Email"
+            type="email"
+            margin="normal"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            error={!!errors.email}
+            helperText={errors.email}
+            autoComplete="email"
+          />
+          <Button type="submit" variant="contained" color="primary" sx={{ mt: 1 }}>
+            Update Email
+          </Button>
+        </form>
       </Box>
 
       <Divider sx={{ mb: 3 }} />
@@ -158,33 +160,45 @@ export default function Profile() {
           Update Password
         </Typography>
 
-        <PasswordField
-          value={currentPassword}
-          onChange={(e) => setCurrentPassword(e.target.value)}
-          error={errors.currentPassword ? getPasswordErrors(errors.currentPassword).length > 0 : false}
-          helperText={
-            errors.currentPassword ? getPasswordErrors(errors.currentPassword).join(", ") : ""
-          }
-          label="Current Password"
-        />
-        <PasswordField
-          value={newPassword}
-          onChange={(e) => setNewPassword(e.target.value)}
-          error={errors.newPassword ? getPasswordErrors(errors.newPassword).length > 0 : false}
-          helperText={
-            errors.newPassword ? getPasswordErrors(errors.newPassword).join(", ") : ""
-          }
-          label="New Password"
-        />
-
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => updatePassword(currentPassword, newPassword)}
-          sx={{ mt: 1 }}
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            updatePassword(currentPassword, newPassword);
+          }}
         >
-          Update Password
-        </Button>
+          {/* Hidden email for accessibility/autofill */}
+          <input
+            type="email"
+            name="username"
+            value={user?.email || ""}
+            readOnly
+            hidden
+            autoComplete="username"
+          />
+          
+          <PasswordField
+            value={currentPassword}
+            onChange={(e) => setCurrentPassword(e.target.value)}
+            error={errors.currentPassword ? getPasswordErrors(errors.currentPassword).length > 0 : false}
+            helperText={
+              errors.currentPassword ? getPasswordErrors(errors.currentPassword).join(", ") : ""
+            }
+            label="Current Password"
+          />
+          <PasswordField
+            value={newPassword}
+            onChange={(e) => setNewPassword(e.target.value)}
+            error={errors.newPassword ? getPasswordErrors(errors.newPassword).length > 0 : false}
+            helperText={
+              errors.newPassword ? getPasswordErrors(errors.newPassword).join(", ") : ""
+            }
+            label="New Password"
+          />
+
+          <Button type="submit" variant="contained" color="primary" sx={{ mt: 1 }}>
+            Update Password
+          </Button>
+        </form>
       </Box>
     </Box>
   );
