@@ -3,7 +3,11 @@ import { Box, Typography, TextField, Button, Divider } from "@mui/material";
 import { useAuth } from "../context/auth/useAuth";
 import PasswordField from "../components/form/PasswordField";
 import type { PasswordValidationResult } from "../types/auth";
-import { getPasswordErrors, validateEmail, validatePassword } from "../utils/auth";
+import {
+  getPasswordErrors,
+  validateEmail,
+  validatePassword,
+} from "../utils/auth";
 import { useDebounceEffect } from "../utils/debounce";
 import { updateUserEmail, updateUserPassword } from "../api/user";
 import type { ApiError } from "../types/api";
@@ -40,7 +44,9 @@ export default function Profile() {
   const validateCurrentPasswordDebounced = useCallback(() => {
     setErrors((prev) => ({
       ...prev,
-      currentPassword: currentPassword.length ? validatePassword(currentPassword) : null,
+      currentPassword: currentPassword.length
+        ? validatePassword(currentPassword)
+        : null,
     }));
   }, [currentPassword]);
   useDebounceEffect(currentPassword, validateCurrentPasswordDebounced);
@@ -54,7 +60,7 @@ export default function Profile() {
   }, [newPassword]);
   useDebounceEffect(newPassword, validateNewPasswordDebounced);
 
-  // Validate and update email 
+  // Validate and update email
   const updateEmail = async (newEmail: string) => {
     // Validate email
     const emailError = validateEmail(newEmail);
@@ -71,7 +77,7 @@ export default function Profile() {
     } catch (err) {
       console.error("Email update error: ", err);
       const errorMsg = (err as ApiError).response?.data?.message || "Error";
-      enqueueSnackbar(errorMsg, { variant: "error", autoHideDuration: 10000  });
+      enqueueSnackbar(errorMsg, { variant: "error", autoHideDuration: 10000 });
     }
   };
 
@@ -80,7 +86,10 @@ export default function Profile() {
     // Validate passwords
     const currentPassValidation = validatePassword(current);
     if (getPasswordErrors(currentPassValidation).length > 0) {
-      setErrors((prev) => ({ ...prev, currentPassword: currentPassValidation }));
+      setErrors((prev) => ({
+        ...prev,
+        currentPassword: currentPassValidation,
+      }));
       return;
     }
     const nextPassValidation = validatePassword(next);
@@ -98,7 +107,7 @@ export default function Profile() {
     } catch (err) {
       console.error("Password update error: ", err);
       const errorMsg = (err as ApiError).response?.data?.message || "Error";
-      enqueueSnackbar(errorMsg, { variant: "error", autoHideDuration: 10000  });
+      enqueueSnackbar(errorMsg, { variant: "error", autoHideDuration: 10000 });
     }
   };
 
@@ -118,7 +127,9 @@ export default function Profile() {
         </Typography>
         <Typography variant="body1">
           <strong>Registered:</strong>{" "}
-          {user?.createdAt ? new Date(user.createdAt).toLocaleDateString() : "-"}
+          {user?.createdAt
+            ? new Date(user.createdAt).toLocaleDateString()
+            : "-"}
         </Typography>
       </Box>
 
@@ -146,7 +157,12 @@ export default function Profile() {
             helperText={errors.email}
             autoComplete="email"
           />
-          <Button type="submit" variant="contained" color="primary" sx={{ mt: 1 }}>
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            sx={{ mt: 1 }}
+          >
             Update Email
           </Button>
         </form>
@@ -175,27 +191,44 @@ export default function Profile() {
             hidden
             autoComplete="username"
           />
-          
+
           <PasswordField
             value={currentPassword}
             onChange={(e) => setCurrentPassword(e.target.value)}
-            error={errors.currentPassword ? getPasswordErrors(errors.currentPassword).length > 0 : false}
+            error={
+              errors.currentPassword
+                ? getPasswordErrors(errors.currentPassword).length > 0
+                : false
+            }
             helperText={
-              errors.currentPassword ? getPasswordErrors(errors.currentPassword).join(", ") : ""
+              errors.currentPassword
+                ? getPasswordErrors(errors.currentPassword).join(", ")
+                : ""
             }
             label="Current Password"
           />
           <PasswordField
             value={newPassword}
             onChange={(e) => setNewPassword(e.target.value)}
-            error={errors.newPassword ? getPasswordErrors(errors.newPassword).length > 0 : false}
+            error={
+              errors.newPassword
+                ? getPasswordErrors(errors.newPassword).length > 0
+                : false
+            }
             helperText={
-              errors.newPassword ? getPasswordErrors(errors.newPassword).join(", ") : ""
+              errors.newPassword
+                ? getPasswordErrors(errors.newPassword).join(", ")
+                : ""
             }
             label="New Password"
           />
 
-          <Button type="submit" variant="contained" color="primary" sx={{ mt: 1 }}>
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            sx={{ mt: 1 }}
+          >
             Update Password
           </Button>
         </form>

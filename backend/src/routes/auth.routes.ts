@@ -22,7 +22,9 @@ router.post("/login", (req: Request, res: Response, next: NextFunction) => {
     { session: false },
     (err: Error | null, user: User | false, info?: IVerifyOptions) => {
       if (err) {
-        return res.status(500).json({ message: err.message || "Internal server error" });
+        return res
+          .status(500)
+          .json({ message: err.message || "Internal server error" });
       }
 
       if (!user)
@@ -60,10 +62,14 @@ router.get("/google/callback", (req: Request, res: Response, next) => {
     // Redirect to frontend with error message
     if (err) {
       const message = encodeURIComponent(err.message || "Google login failed");
-      return res.redirect(`${process.env["FRONTEND_URL"]}/login?error=${message}`);
+      return res.redirect(
+        `${process.env["FRONTEND_URL"]}/login?error=${message}`,
+      );
     }
     if (!user) {
-      return res.redirect(`${process.env["FRONTEND_URL"]}/login?error=No user found`);
+      return res.redirect(
+        `${process.env["FRONTEND_URL"]}/login?error=No user found`,
+      );
     }
 
     // Success → set JWT cookie

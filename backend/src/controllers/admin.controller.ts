@@ -64,7 +64,12 @@ export const updateUserRole = async (
 
     // If we updated our role, then update our jwt cookie accordingly
     if (Number(userId) === jwtUser.id) {
-      const token = createJWT(jwtUser.id, jwtUser.email, role, jwtUser.createdAt);
+      const token = createJWT(
+        jwtUser.id,
+        jwtUser.email,
+        role,
+        jwtUser.createdAt,
+      );
       setJWTCookie(res, token);
     }
 

@@ -37,6 +37,7 @@ npm install
 2. Update .env file (if needed)
 
 3. Start development server:
+
 ```bash
 npm run dev
 ```

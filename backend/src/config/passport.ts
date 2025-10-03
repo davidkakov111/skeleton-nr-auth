@@ -71,23 +71,35 @@ passport.use(
         });
         let user: User | undefined;
 
-        if (users.length > 0) {// If there are posible users matches in db
-          user = users.find(u => u.googleId === googleId); // Find already existing user with this google id
-              
-          if (!user) { 
+        if (users.length > 0) {
+          // If there are posible users matches in db
+          user = users.find((u) => u.googleId === googleId); // Find already existing user with this google id
+
+          if (!user) {
             // There is a single user match by email
             const dbUserByEmail = users[0]!;
 
-            if (!dbUserByEmail.googleId) {// If the existing account with this email does not have a googleId
+            if (!dbUserByEmail.googleId) {
+              // If the existing account with this email does not have a googleId
               if (!googleEmailVerified) {
-                return done(new Error("This Google email is already associated with a non-Google account in our system. However, because your Google email is not verified, we cannot link it to your existing account. Please verify your Google email with Google, or log in using your original credentials."), undefined);
+                return done(
+                  new Error(
+                    "This Google email is already associated with a non-Google account in our system. However, because your Google email is not verified, we cannot link it to your existing account. Please verify your Google email with Google, or log in using your original credentials.",
+                  ),
+                  undefined,
+                );
               }
               user = await prisma.user.update({
                 where: { id: dbUserByEmail.id },
                 data: { googleId },
               });
             } else {
-              return done(new Error("This Google account's email is already linked to another Google account in our system."), undefined);
+              return done(
+                new Error(
+                  "This Google account's email is already linked to another Google account in our system.",
+                ),
+                undefined,
+              );
             }
           }
         } else {

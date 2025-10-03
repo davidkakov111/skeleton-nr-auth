@@ -21,12 +21,10 @@ export const register = async (req: Request, res: Response): Promise<void> => {
       res.status(400).json({ message: "Invalid email format" });
       return;
     } else if (!validatePassword(password)) {
-      res
-        .status(400)
-        .json({
-          message:
-            "Password must be at least 8 characters long and include uppercase, lowercase, digit, and special character.",
-        });
+      res.status(400).json({
+        message:
+          "Password must be at least 8 characters long and include uppercase, lowercase, digit, and special character.",
+      });
       return;
     }
 
@@ -49,17 +47,15 @@ export const register = async (req: Request, res: Response): Promise<void> => {
     );
 
     setJWTCookie(res, token);
-    res
-      .status(201)
-      .json({
-        message: "User registered",
-        user: {
-          id: newUser.id,
-          email: newUser.email,
-          role: newUser.role,
-          createdAt: newUser.createdAt,
-        },
-      });
+    res.status(201).json({
+      message: "User registered",
+      user: {
+        id: newUser.id,
+        email: newUser.email,
+        role: newUser.role,
+        createdAt: newUser.createdAt,
+      },
+    });
   } catch (err) {
     console.error("Error in register controller: ", err);
     res.status(500).json({ message: "Server error" });

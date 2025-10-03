@@ -35,11 +35,9 @@ export const verifyJWT = (req: Request, res: Response, next: NextFunction) => {
 export const authorizeRoles = (...roles: UserRole[]) => {
   return (req: Request, res: Response, next: NextFunction) => {
     if (!req.jwtUser || !roles.includes(req.jwtUser.role)) {
-      res
-        .status(403)
-        .json({
-          message: `Forbidden: insufficient role, your role should be one of: ${roles.join(", ")}`,
-        });
+      res.status(403).json({
+        message: `Forbidden: insufficient role, your role should be one of: ${roles.join(", ")}`,
+      });
     } else {
       next();
     }

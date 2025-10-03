@@ -36,11 +36,13 @@ npm install
 2. Create .env file based on .env.example
 
 3. Run Prisma migrations:
+
 ```bash
 npx prisma migrate dev --name init
 ```
 
 4. Start development server:
+
 ```bash
 npm run dev
 ```

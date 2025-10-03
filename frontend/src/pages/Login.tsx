@@ -136,7 +136,11 @@ export default function Login() {
       <PasswordField
         value={password}
         onChange={(e) => setPassword(e.target.value)}
-        error={errors.password ? getPasswordErrors(errors.password).length > 0 : false}
+        error={
+          errors.password
+            ? getPasswordErrors(errors.password).length > 0
+            : false
+        }
         helperText={
           errors.password ? getPasswordErrors(errors.password).join(", ") : ""
         }
